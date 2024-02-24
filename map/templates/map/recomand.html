@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="kor" charset=utf-8>
+    <head>
+        <meta charset="UTF-8" >
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" type="image/x-icon" href="{%static 'map/D.png'%}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <title>DAON</title>
+        <style>
+           body{
+                height: 100vh;
+                width: 100vw;
+           }
+           li {
+                font-size:18px;
+           }
+
+           hr{
+                width:80%;
+                margin-left : auto;
+                margin-right : auto;
+           }
+
+           .btn{
+                margin: 0.25rem 0.125rem;
+                    margin-top: 0.25rem;
+                    margin-right: 0.125rem;
+                    margin-bottom: 0.25rem;
+                    margin-left: 0.125rem;
+           }
+
+           header {
+                position: sticky;
+                top: 0;
+                z-index: 1;
+           }
+           .main{
+                display:flex;
+                justify-content: center;
+                height: 100%
+
+           }
+           .recomand_box{
+                position:relative;
+                width:40%;
+                height: 80%;
+                justify-content: center;
+                text-align: center;
+                border:1px solid 255,255,255;
+                border-radius:10px;
+                background-color: white;
+                padding:1rem;
+                box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+           }
+
+        </style>
+    </head>
+    <body>
+        <header class="p-3 bg-success bg-opacity-50 text-white">
+            <div class="container">
+                <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                    <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"><img src="/static/map/daon.png" width="60"></a>
+                    <ul class="nav nav-tabs col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                      <li><a href="/main" class="nav-link px-2 text-white">홈</a></li>
+                      <li><a href="" class="nav-link px-2 text-secondary">추천</a></li>
+                      <li><a href="/make" class="nav-link px-2 text-white">공고작성</a></li>
+                    </ul>
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+                      <input type="search" class="form-control form-control-dark" placeholder="지원 검색..." aria-label="Search">
+                    </form>
+                    <div class="dropdown text-end">
+                          <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="mdo" width="24" height="24" class="rounded-circle">
+                          </a>
+                          <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1" style="">
+                            <li><a class="dropdown-item" href="#">프로필</a></li>
+                            <li><a class="dropdown-item" href="#">설정</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">로그아웃</a></li>
+                          </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+        &nbsp;&nbsp;&nbsp;
+        <div class="main" >
+            <div class="recomand_box" style="overflow:auto">
+                <h4>맞춤형 추천 지원정책</h4>
+                <hr>
+                <table class="table">
+                    <tr>
+                        <th>지원정책</th>
+                        <th>지자체</th>
+                    </tr>
+
+                    <tbody id = "table1">
+
+                    </tbody>
+                </table>
+            </div>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <div class="recomand_box">
+                <div class="hash_tag">
+                    <h4>#복지 해시태그</h4>
+                    <hr>
+                    <form method="get" action="/recomand/" id="optionForm">
+                        <button name="hash" type="submit" form="optionForm" class="btn btn-outline-primary" value="youth_support">#청년 지원</button>
+                        <button name="hash" type="submit" form="optionForm" class="btn btn-outline-secondary" value="birth_infant">#출산 및 육아</button>
+                        <button name="hash" type="submit" form="optionForm" class="btn btn-outline-success" value="old">#노인</button>
+                        <br>
+                        <button name="hash" type="submit" form="optionForm" class="btn btn-outline-danger" value="marriage_family">#결혼 및 가정</button>
+                        <button name="hash" type="submit" form="optionForm" class="btn btn-outline-warning" value="subsidy_supportFund">#보조금 및 지원금</button>
+                        <button name="hash" type="submit" form="optionForm" class="btn btn-outline-info" value="disability">#장애인 복지</button>
+                    </form>
+                </div>
+                &nbsp;&nbsp;&nbsp;
+                <h4>필요한 정책</h4>
+                <hr>
+                <form method="post" action="/recomand/" id="optionForm2">
+                    <div class="input-group">
+                    <span class="input-group-text">정책<br> 요구사항:</span>
+                    <input class="form-control" form="optionForm2" aria-label="wanted_policy" name="want" id="want" type="text">
+                </div>
+                <button type="submit" value="Submit" onclick="location.href='http://127.0.0.1:8000/recomand/';" class="btn btn-outline-secondary btn-lg" style="margin: 3% 0;" form="optionForm2">제출</button>
+
+                </form>
+
+            </div>
+        </div>
+
+    </body>
+<script>
+var dataframe =  {{dataframe|safe}}
+
+buildTable(dataframe)
+console.log(dataframe)
+
+function buildTable(data) {
+        var table = document.getElementById('table1')
+
+        for (var i=0; i < data.length; i++)
+        {
+            var row = `<tr>
+                <td style="cursor:pointer;" onClick="window.open('${data[i].URL}', '', '');">${data[i].사업명}</td>
+                <td style="cursor:pointer;" onClick="window.open('${data[i].URL}', '', '');">${data[i].지역}</td>
+                </tr>`
+            table.innerHTML += row
+        }
+    }
+</script>
+
+</html>
